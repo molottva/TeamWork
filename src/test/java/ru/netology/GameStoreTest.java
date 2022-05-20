@@ -259,8 +259,8 @@ public class GameStoreTest {
                 @Disabled
                 @Test
                 public void shouldGetManyMostPlayer() {
-                    String[] expected = new String[]{"Кодзима-Гений", "Виталий"};
-                    storeSomePlayers.addPlayTime("Виталий", 10);
+                    String[] expected = new String[]{"Кодзима-Гений", "Анна"};
+                    storeSomePlayers.addPlayTime("Анна", 60);
                     assertTrue(expected.equals(storeSomePlayers.getMostPlayer()));
                 }
             }
