@@ -79,7 +79,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void shouldMostPlayerByGenre() {
+    public void shouldMostPlayerByGenreNoInstallGame() {
         GameStore store = new GameStore();
         Game game = store.publishGame("Ведьмак", "Рпг");
         Game game1 = store.publishGame("Ведьмак 2", "Рпг");
