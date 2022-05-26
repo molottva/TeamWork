@@ -96,6 +96,38 @@ public class PlayerTest {
         Game actual = player.mostPlayerByGenre("Аркады");
         assertEquals(expected, actual);
     }
+    
+    @Test
+    public void addPlayGameNegativeValue() {
+        GameStore store = new GameStore();
+        Game game = store.publishGame("Нетология Баттл Онлайн", "Аркады");
+
+        Player player = new Player("Petya");
+        player.installGame(game);
+        player.play(game, -1);
+
+        assertThrows(Exception.class, () -> {
+            player.play(game, -1);
+        });
+    }
+
+    @Test
+    public void addDoubleGame() {
+        GameStore store = new GameStore();
+        Game game = store.publishGame("Ведьмак", "Рпг");
+        Game game1 = store.publishGame("Ведьмак 2", "Рпг");
+        Game game3 = store.publishGame("Нетология Баттл Онлайн", "Аркады");
+
+        Player player = new Player("Петя");
+        player.installGame(game);
+        player.play(game, 1);
+        player.installGame(game);
+
+        int expected = 1;
+        int actual = player.sumGenre(game.getGenre());
+        assertEquals(expected, actual);
+    }
+    
 
 
 }
