@@ -38,7 +38,9 @@ public class Player {
      */
     public int play(Game game, int hours) {
         game.getStore().addPlayTime(name, hours);
-        if (playedTime.containsKey(game)) {
+        if (hours <= 0) {
+            throw new RuntimeException("Игровое время не может быть отрицательным или равным нулю!");
+        } else if (playedTime.containsKey(game)) {
             playedTime.put(game, playedTime.get(game) + hours);
         } else {
             throw new RuntimeException("У игрока " + this.name + " игра " + game + " не установлена!");
