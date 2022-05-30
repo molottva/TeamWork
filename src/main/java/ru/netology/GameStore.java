@@ -15,6 +15,22 @@ public class GameStore {
      */
     private Map<String, Integer> playedTime = new HashMap<>();
 
+    public List<Game> getGames() {
+        return games;
+    }
+
+    public void setGames(List<Game> games) {
+        this.games = games;
+    }
+
+    public Map<String, Integer> getPlayedTime() {
+        return playedTime;
+    }
+
+    public void setPlayedTime(Map<String, Integer> playedTime) {
+        this.playedTime = playedTime;
+    }
+
     /**
      * Создание объекта игры с заданными заголовком и жанром
      * Каждый объект игры помнит объект каталога, которому она принадлежит
