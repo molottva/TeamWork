@@ -46,7 +46,7 @@ public class GameStore {
      * если игра есть и false иначе
      */
     public boolean containsGame(Game game) {
-        f for (int i = 0; i < games.size(); i++) {
+         for (int i = 0; i < games.size(); i++) {
             if (games.get(i).equals(game)) {
                 return true;
             }
@@ -71,9 +71,9 @@ public class GameStore {
      * Ищет имя игрока, который играл в игры этого каталога больше всего
      * времени. Если игроков нет, то возвращется null
      */
-    public String getMostPlayer() {
+    public String[] getMostPlayer() {
         int mostTime = 0;
-        String[] bestPlayer = null;
+        String[] bestPlayers = null;
         for (String playerName : playedTime.keySet()) {
             int playerTime = playedTime.get(playerName);
             if (playerTime > mostTime) {
