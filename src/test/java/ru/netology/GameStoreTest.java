@@ -220,6 +220,20 @@ public class GameStoreTest {
                     storeSomePlayers.addPlayTime("Никита", 20);
                     assertEquals(expected, storeSomePlayers.getPlayedTime());
                 }
+
+                @Test
+                public void shouldAddPlayTimeExceptionNegativeValue() {
+                    assertThrows(RuntimeException.class, () -> {
+                        storeSomePlayers.addPlayTime("Юлия", -5);
+                    });
+                }
+
+                @Test
+                public void shouldAddPlayTimeExceptionZeroValue() {
+                    assertThrows(RuntimeException.class, () -> {
+                        storeSomePlayers.addPlayTime("Никита", 0);
+                    });
+                }
             }
         }
 
