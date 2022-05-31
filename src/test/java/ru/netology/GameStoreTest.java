@@ -27,11 +27,10 @@ public class GameStoreTest {
             storeSomeGames.publishGame("XCOM 2", "Tactic");
         }
 
-        @Disabled("Невозможно получить actual")
+        //        @Disabled("Невозможно получить actual")
         @Nested
         @DisplayName("Тестирование метода publishGame()")
         public class publishGameTests {
-            //TODO для тестабилити return в метод publishGame или геттер на games
             @Nested
             @DisplayName("Пустой магазин")
             public class EmptyStore {
@@ -39,7 +38,8 @@ public class GameStoreTest {
                 public void shouldPublishGame() {
                     List<Game> expected = new ArrayList<>();
                     expected.add(new Game("Witcher 3", "Action", storeEmpty));
-                    //assertTrue(expected.equals(storeEmpty.publishGame("Witcher 3", "Action")));
+                    storeEmpty.publishGame("Witcher 3", "Action");
+                    assertEquals(expected, storeEmpty.getGames());
                 }
             }
 
@@ -51,14 +51,17 @@ public class GameStoreTest {
                     List<Game> expected = new ArrayList<>();
                     expected.add(new Game("Witcher 3", "Action", storeOneGame));
                     expected.add(new Game("Kerbal Space Program", "Sandbox", storeOneGame));
-                    //assertTrue(expected.equals(storeOneGame.publishGame("Kerbal Space Program", "Sandbox")));
+                    storeOneGame.publishGame("Kerbal Space Program", "Sandbox");
+                    assertEquals(expected, storeOneGame.getGames());
                 }
 
                 @Test
                 public void shouldPublishOldGame() {
+                    //todo bug
                     List<Game> expected = new ArrayList<>();
                     expected.add(new Game("Witcher 3", "Action", storeOneGame));
-                    //assertTrue(expected.equals(storeOneGame.publishGame("Witcher 3", "Action")));
+                    storeOneGame.publishGame("Witcher 3", "Action");
+                    assertEquals(expected, storeOneGame.getGames());
                 }
             }
 
@@ -74,7 +77,8 @@ public class GameStoreTest {
                     expected.add(new Game("Europe Universalis IV", "Strategy", storeSomeGames));
                     expected.add(new Game("XCOM 2", "Tactic", storeSomeGames));
                     expected.add(new Game("Grand Theft Auto V", "Action", storeSomeGames));
-                    //assertTrue(expected.equals(storeSomeGames.publishGame("Grand Theft Auto V", "Action")));
+                    storeSomeGames.publishGame("Grand Theft Auto V", "Action");
+                    assertEquals(expected, storeSomeGames.getGames());
                 }
 
                 @Test
@@ -85,7 +89,8 @@ public class GameStoreTest {
                     expected.add(new Game("Kerbal Space Program", "Sandbox", storeSomeGames));
                     expected.add(new Game("Europe Universalis IV", "Strategy", storeSomeGames));
                     expected.add(new Game("XCOM 2", "Tactic", storeSomeGames));
-                    assertTrue(expected.equals(storeSomeGames.publishGame("Europe Universalis IV", "Strategy")));
+                    storeSomeGames.publishGame("Europe Universalis IV", "Strategy");
+                    assertEquals(expected, storeSomeGames.getGames());
                 }
             }
         }
@@ -149,11 +154,10 @@ public class GameStoreTest {
             storeSomePlayers.addPlayTime("Иван", 20);
         }
 
-        @Disabled("Невозможно получить actual")
+        //        @Disabled("Невозможно получить actual")
         @Nested
         @DisplayName("Тестирование метода addPlayTime()")
         public class AddPlayTimeTests {
-            //TODO для тестабилити сделать return в методе addPlayTime() или геттер на playedTime
             @Nested
             @DisplayName("Магазин без игроков")
             public class StoreEmptyTest {
@@ -162,8 +166,8 @@ public class GameStoreTest {
                 public void shouldAddPlayTime() {
                     Map<String, Integer> expected = new HashMap<>();
                     expected.put("Кодзима-Гений", 10);
-
-                    //assertTrue(expected.equals(storeEmpty.addPlayTime("Кодзима-Гений", 10)));
+                    storeEmpty.addPlayTime("Кодзима-Гений", 10);
+                    assertEquals(expected, storeEmpty.getPlayedTime());
                 }
             }
 
@@ -176,16 +180,16 @@ public class GameStoreTest {
                     Map<String, Integer> expected = new HashMap<>();
                     expected.put("Кодзима-Гений", 60);
                     expected.put("Никита", 10);
-
-                    //assertTrue(expected.equals(storeOnePlayer.addPlayTime("Никита", 10)));
+                    storeOnePlayer.addPlayTime("Никита", 10);
+                    assertEquals(expected, storeOnePlayer.getPlayedTime());
                 }
 
                 @Test
                 public void shouldAddPlayTimeOneOldPlayer() {
                     Map<String, Integer> expected = new HashMap<>();
                     expected.put("Кодзима-Гений", 70);
-
-                    //assertTrue(expected.equals(storeOnePlayer.addPlayTime("Кодзима-Гений", 10)));
+                    storeOnePlayer.addPlayTime("Кодзима-Гений", 10);
+                    assertEquals(expected, storeOnePlayer.getPlayedTime());
                 }
             }
 
@@ -201,13 +205,8 @@ public class GameStoreTest {
                     expected.put("Юрий", 30);
                     expected.put("Иван", 20);
                     expected.put("Владислав", 10);
-                    storeSomePlayers.addPlayTime("Кодзима-Гений", 60);
-                    storeSomePlayers.addPlayTime("Виталий", 50);
-                    storeSomePlayers.addPlayTime("Никита", 40);
-                    storeSomePlayers.addPlayTime("Юрий", 30);
-                    storeSomePlayers.addPlayTime("Иван", 20);
-
-                    //assertTrue(expected.equals(storeOnePlayer.addPlayTime("Владислав", 10)));
+                    storeSomePlayers.addPlayTime("Владислав", 10);
+                    assertEquals(expected, storeSomePlayers.getPlayedTime());
                 }
 
                 @Test
@@ -218,8 +217,8 @@ public class GameStoreTest {
                     expected.put("Никита", 60);
                     expected.put("Юрий", 30);
                     expected.put("Иван", 20);
-
-                    //assertTrue(expected.equals(storeOnePlayer.addPlayTime("Никита", 20)));
+                    storeSomePlayers.addPlayTime("Никита", 20);
+                    assertEquals(expected, storeSomePlayers.getPlayedTime());
                 }
             }
         }
@@ -242,8 +241,8 @@ public class GameStoreTest {
             public class StoreOnePlayerTests {
                 @Test
                 public void shouldGetMostPlayer() {
-                    String expected = "Кодзима-Гений";
-                    assertTrue(expected.equals(storeOnePlayer.getMostPlayer()));
+                    String[] expected = new String[]{"Кодзима-Гений"};
+                    assertArrayEquals(expected, storeOnePlayer.getMostPlayer());
                 }
             }
 
@@ -252,16 +251,15 @@ public class GameStoreTest {
             public class StoreSomePlayerTests {
                 @Test
                 public void shouldGetOneMostPlayer() {
-                    String expected = "Кодзима-Гений";
-                    assertTrue(expected.equals(storeSomePlayers.getMostPlayer()));
+                    String[] expected = new String[]{"Кодзима-Гений"};
+                    assertArrayEquals(expected, storeSomePlayers.getMostPlayer());
                 }
 
-                @Disabled
                 @Test
                 public void shouldGetManyMostPlayer() {
                     String[] expected = new String[]{"Кодзима-Гений", "Анна"};
                     storeSomePlayers.addPlayTime("Анна", 60);
-                    assertTrue(expected.equals(storeSomePlayers.getMostPlayer()));
+                    assertArrayEquals(expected, storeSomePlayers.getMostPlayer());
                 }
             }
         }
