@@ -79,7 +79,7 @@ public class GameStore {
      */
     public String[] getMostPlayer() {
         int mostTime = 0;
-        String[] bestPlayers = null;
+        String[] bestPlayers = new String[0];
         for (String playerName : playedTime.keySet()) {
             int playerTime = playedTime.get(playerName);
             if (playerTime > mostTime) {
