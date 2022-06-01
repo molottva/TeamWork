@@ -60,8 +60,9 @@ public class GameStoreTest {
                     //todo bug
                     List<Game> expected = new ArrayList<>();
                     expected.add(new Game("Witcher 3", "Action", storeOneGame));
-                    storeOneGame.publishGame("Witcher 3", "Action");
-                    assertEquals(expected, storeOneGame.getGames());
+                    assertThrows(RuntimeException.class, () -> {
+                        storeOneGame.publishGame("Witcher 3", "Action");
+                    });
                 }
             }
 
@@ -89,8 +90,9 @@ public class GameStoreTest {
                     expected.add(new Game("Kerbal Space Program", "Sandbox", storeSomeGames));
                     expected.add(new Game("Europe Universalis IV", "Strategy", storeSomeGames));
                     expected.add(new Game("XCOM 2", "Tactic", storeSomeGames));
-                    storeSomeGames.publishGame("Europe Universalis IV", "Strategy");
-                    assertEquals(expected, storeSomeGames.getGames());
+                    assertThrows(RuntimeException.class, () -> {
+                        storeSomeGames.publishGame("Europe Universalis IV", "Strategy");
+                    });
                 }
             }
         }
