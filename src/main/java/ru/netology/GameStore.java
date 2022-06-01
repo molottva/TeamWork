@@ -35,8 +35,11 @@ public class GameStore {
      * Создание объекта игры с заданными заголовком и жанром
      * Каждый объект игры помнит объект каталога, которому она принадлежит
      */
-    public Game publishGame(String title, String genre) {
+     public Game publishGame(String title, String genre) {
         Game game = new Game(title, genre, this);
+        if (games.contains(game)) {
+            throw new RuntimeException("Игра " + title + " уже опубликована!");
+        }
         games.add(game);
         return game;
     }
@@ -59,9 +62,12 @@ public class GameStore {
      * за игрой этого каталога. Игрок задаётся по имени. Время должно
      * суммироваться с прошлым значением для этого игрока
      */
-    public void addPlayTime(String playerName, int hours) {
+     public void addPlayTime(String playerName, int hours) {
+        if (hours <= 0) {
+            throw new RuntimeException("Отрицательное или нулевое игровое время невалидно!");
+        }
         if (playedTime.containsKey(playerName)) {
-            playedTime.put(playerName, playedTime.get(playerName));
+            playedTime.put(playerName, playedTime.get(playerName) + hours);
         } else {
             playedTime.put(playerName, hours);
         }
