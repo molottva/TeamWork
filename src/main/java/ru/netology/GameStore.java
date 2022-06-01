@@ -14,13 +14,32 @@ public class GameStore {
      * Значение - суммарное количество часов в игры этого каталога
      */
     private Map<String, Integer> playedTime = new HashMap<>();
+    
+     public List<Game> getGames() {
+        return games;
+    }
+
+    public void setGames(List<Game> games) {
+        this.games = games;
+    }
+
+    public Map<String, Integer> getPlayedTime() {
+        return playedTime;
+    }
+
+    public void setPlayedTime(Map<String, Integer> playedTime) {
+        this.playedTime = playedTime;
+    }
 
     /**
      * Создание объекта игры с заданными заголовком и жанром
      * Каждый объект игры помнит объект каталога, которому она принадлежит
      */
-    public Game publishGame(String title, String genre) {
+     public Game publishGame(String title, String genre) {
         Game game = new Game(title, genre, this);
+        if (games.contains(game)) {
+            throw new RuntimeException("Игра " + title + " уже опубликована!");
+        }
         games.add(game);
         return game;
     }
@@ -30,8 +49,8 @@ public class GameStore {
      * если игра есть и false иначе
      */
     public boolean containsGame(Game game) {
-        for (int i = 1; i < games.size(); i++) {
-            if (games.get(i - 1).equals(game)) {
+         for (int i = 0; i < games.size(); i++) {
+            if (games.get(i).equals(game)) {
                 return true;
             }
         }
@@ -43,9 +62,12 @@ public class GameStore {
      * за игрой этого каталога. Игрок задаётся по имени. Время должно
      * суммироваться с прошлым значением для этого игрока
      */
-    public void addPlayTime(String playerName, int hours) {
+     public void addPlayTime(String playerName, int hours) {
+        if (hours <= 0) {
+            throw new RuntimeException("Отрицательное или нулевое игровое время невалидно!");
+        }
         if (playedTime.containsKey(playerName)) {
-            playedTime.put(playerName, playedTime.get(playerName));
+            playedTime.put(playerName, playedTime.get(playerName) + hours);
         } else {
             playedTime.put(playerName, hours);
         }
@@ -55,24 +77,41 @@ public class GameStore {
      * Ищет имя игрока, который играл в игры этого каталога больше всего
      * времени. Если игроков нет, то возвращется null
      */
-    public String getMostPlayer() {
-        int mostTime = 1;
-        String bestPlayer = null;
+    public String[] getMostPlayer() {
+        int mostTime = 0;
+        String[] bestPlayers = new String[0];
         for (String playerName : playedTime.keySet()) {
             int playerTime = playedTime.get(playerName);
             if (playerTime > mostTime) {
                 mostTime = playerTime;
-                bestPlayer = playerName;
+                
             }
         }
-        return bestPlayer;
+        if (mostTime == 0) {
+            return null;
+        } else {
+            for (String playerName : playedTime.keySet()) {
+                if (playedTime.get(playerName) == mostTime) {
+                    String[] tmp = new String[bestPlayers.length + 1];
+                    System.arraycopy(bestPlayers, 0, tmp, 0, bestPlayers.length);
+                    tmp[tmp.length - 1] = playerName;
+                    bestPlayers = tmp;
+                }
+            }
+        }
+        return bestPlayers;
     }
 
     /**
      * Суммирует общее количество времени всех игроков, проведённого
      * за играми этого каталога
      */
-    public int getSumPlayedTime() {
-        return 0;
+   public int getSumPlayedTime() {
+        int sum = 0;
+        ArrayList<Integer> playedHours = new ArrayList<>(playedTime.values());
+        for (Integer hours : playedHours) {
+            sum +=hours;
+        }
+        return sum;
     }
 }
