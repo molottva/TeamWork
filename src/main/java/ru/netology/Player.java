@@ -6,9 +6,11 @@ import java.util.Map;
 public class Player {
     private String name;
 
-    /** информация о том, в какую игру сколько часов было сыграно
-    ключ - игра
-    значение - суммарное количество часов игры в эту игру */
+    /**
+     * информация о том, в какую игру сколько часов было сыграно
+     * ключ - игра
+     * значение - суммарное количество часов игры в эту игру
+     */
     private Map<Game, Integer> playedTime = new HashMap<>();
 
     public Player(String name) {
@@ -19,44 +21,77 @@ public class Player {
         return name;
     }
 
-    /** добавление игры игроку
-    если игра уже была, никаких изменений происходить не должно */
-    public void installGame(Game game) {
-        playedTime.put(game, 0);
+    public void setName(String name) {
+        this.name = name;
     }
 
-    /** игрок играет в игру game на протяжении hours часов
-    об этом нужно сообщить объекту-каталогу игр, откуда была установлена игра
-    также надо обновить значения в мапе игрока, добавив проигранное количество часов
-    возвращает суммарное количество часов, проигранное в эту игру.
-    если игра не была установлена, то надо выкидывать RuntimeException */
+    public Map<Game, Integer> getPlayedTime() {
+        return playedTime;
+    }
+
+    public void setPlayedTime(Map<Game, Integer> playedTime) {
+        this.playedTime = playedTime;
+    }
+
+    /**
+     * добавление игры игроку
+     * если игра уже была, никаких изменений происходить не должно
+     */
+    public void installGame(Game game) {
+        if (!playedTime.containsKey(game)) {
+            playedTime.put(game, 0);
+        }
+    }
+
+    /**
+     * игрок играет в игру game на протяжении hours часов
+     * об этом нужно сообщить объекту-каталогу игр, откуда была установлена игра
+     * также надо обновить значения в мапе игрока, добавив проигранное количество часов
+     * возвращает суммарное количество часов, проигранное в эту игру.
+     * если игра не была установлена, то надо выкидывать RuntimeException
+     */
     public int play(Game game, int hours) {
         game.getStore().addPlayTime(name, hours);
-        if (playedTime.containsKey(game)) {
-            playedTime.put(game, playedTime.get(game));
+        if (hours <= 0) {
+            throw new RuntimeException("Игровое время не может быть отрицательным или равным нулю!");
+        } else if (playedTime.containsKey(game)) {
+            playedTime.put(game, playedTime.get(game) + hours);
         } else {
-            playedTime.put(game, hours);
+            throw new RuntimeException("У игрока " + this.name + " игра " + game + " не установлена!");
         }
         return playedTime.get(game);
     }
 
-    /** Метод принимает жанр игры (одно из полей объекта игры) и
-     суммирует время, проигранное во все игры этого жанра этим игроком */
+    /**
+     * Метод принимает жанр игры (одно из полей объекта игры) и
+     * суммирует время, проигранное во все игры этого жанра этим игроком
+     */
     public int sumGenre(String genre) {
         int sum = 0;
         for (Game game : playedTime.keySet()) {
             if (game.getGenre().equals(genre)) {
                 sum += playedTime.get(game);
-            } else {
-                sum = 0;
             }
         }
         return sum;
     }
 
-    /** Метод принимает жанр и возвращает игру этого жанра, в которую играли больше всего
-     Если в игры этого жанра не играли, возвращается null */
+    /**
+     * Метод принимает жанр и возвращает игру этого жанра, в которую играли больше всего
+     * Если в игры этого жанра не играли, возвращается null
+     */
     public Game mostPlayerByGenre(String genre) {
+        int max = 0;
+        for (Game game : playedTime.keySet()) {
+            if (game.getGenre().equals(genre) && playedTime.get(game) > max) {
+                max = playedTime.get(game);
+            }
+        }
+        for (Game game : playedTime.keySet()) {
+            if (max == playedTime.get(game)) {
+                return game;
+            }
+        }
         return null;
     }
 }
